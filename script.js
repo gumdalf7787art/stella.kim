@@ -265,6 +265,19 @@ function initHeroRotation() {
     };
   });
   
+  // Track currently displayed images and recently used images
+  let activeImages = new Set();
+  let recentImages = [];
+  const maxRecent = 5; // Remember the last 5 images shown
+  
+  // Initialize activeImages with the starting images
+  slots.forEach(slot => {
+    const activeImg = slot.querySelector('.hero-mini-img.active');
+    if (activeImg) {
+      activeImages.add(activeImg.getAttribute('src'));
+    }
+  });
+
   slots.forEach((slot, index) => {
     // Stagger the rotation for each slot slightly
     const intervalTime = 4000 + (index * 800) + (Math.random() * 500);
@@ -279,8 +292,33 @@ function initHeroRotation() {
       // Wait until pool is populated
       if (pool.length === 0) return;
       
-      // Pick random image from pool
-      const randomSrc = pool[Math.floor(Math.random() * pool.length)];
+      // Filter available pool (not currently active, and not recently used)
+      let availablePool = pool.filter(src => !activeImages.has(src) && !recentImages.includes(src));
+      
+      // Fallback 1: Ignore recent restriction if we run out of images
+      if (availablePool.length === 0) {
+        availablePool = pool.filter(src => !activeImages.has(src));
+      }
+      
+      // Fallback 2: Absolute fallback (shouldn't happen unless pool is very small)
+      if (availablePool.length === 0) {
+        availablePool = pool;
+      }
+      
+      // Pick random image from available pool
+      const randomSrc = availablePool[Math.floor(Math.random() * availablePool.length)];
+      
+      // Update tracking
+      const oldSrc = isPrimaryActive ? primaryImg.getAttribute('src') : secondaryImg.getAttribute('src');
+      if (oldSrc) {
+        activeImages.delete(oldSrc);
+      }
+      activeImages.add(randomSrc);
+      
+      recentImages.push(randomSrc);
+      if (recentImages.length > maxRecent) {
+        recentImages.shift();
+      }
       
       if (isPrimaryActive) {
         secondaryImg.src = randomSrc;

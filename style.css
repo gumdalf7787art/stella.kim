@@ -829,179 +829,135 @@ ul {
 }
 
 /* =========================================
-   Carousel Modal & DepthCarousel
+   Photo Viewer Modal (Lightweight)
 ========================================= */
-.carousel-modal {
+.photo-viewer {
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(10, 10, 10, 0.95);
+  background: rgba(5, 5, 5, 0.97);
   z-index: 2000;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.35s ease;
 }
 
-.carousel-modal.active {
+.photo-viewer.active {
   opacity: 1;
   pointer-events: auto;
 }
 
-.carousel-modal-close {
+.photo-viewer__close {
   position: absolute;
-  top: 30px;
-  right: 40px;
+  top: 16px;
+  right: 20px;
   background: transparent;
   border: none;
-  color: var(--color-soft-white);
-  font-size: 3rem;
+  color: rgba(255,255,255,0.7);
+  font-size: 2.5rem;
   font-weight: 300;
   cursor: pointer;
   z-index: 3000;
   transition: color 0.3s ease, transform 0.3s ease;
+  line-height: 1;
 }
 
-.carousel-modal-close:hover {
-  color: var(--color-champagne-silver);
-  transform: scale(1.1);
+.photo-viewer__close:hover {
+  color: #fff;
+  transform: scale(1.15);
 }
 
-/* DepthCarousel CSS */
-.depth-carousel {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  min-height: 320px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  perspective: var(--dc-perspective, 1400px);
-  perspective-origin: 50% 50%;
-  touch-action: pan-y;
-  outline: none;
-  user-select: none;
-  -webkit-user-select: none;
-  cursor: grab;
-}
-
-.depth-carousel:active {
-  cursor: grabbing;
-}
-
-.depth-carousel:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.5);
-  outline-offset: 4px;
-  border-radius: 12px;
-}
-
-.depth-carousel__stage {
-  position: absolute;
-  inset: 0;
-  transform-style: preserve-3d;
-}
-
-.depth-carousel__card {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform-origin: center center;
-  overflow: hidden;
-  background: #0b0d12;
-  box-shadow:
-    0 30px 60px -20px rgba(0, 0, 0, 0.65),
-    0 8px 20px -10px rgba(0, 0, 0, 0.5);
-  will-change: transform, opacity, filter;
-  cursor: pointer;
-  transform: translate(-50%, -50%);
-}
-
-.depth-carousel__img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  pointer-events: none;
-  -webkit-user-drag: none;
-}
-
-.depth-carousel__tint {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  pointer-events: none;
-  mix-blend-mode: multiply;
-}
-
-.depth-carousel__arrow {
+.photo-viewer__arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   z-index: 3000;
-  width: 42px;
-  height: 42px;
+  width: 48px;
+  height: 48px;
   display: grid;
   place-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 999px;
-  background: rgba(18, 20, 26, 0.55);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
   backdrop-filter: blur(8px);
   color: #fff;
   cursor: pointer;
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
-.depth-carousel__arrow:hover {
-  background: rgba(28, 31, 40, 0.85);
-  border-color: rgba(255, 255, 255, 0.4);
+.photo-viewer__arrow:hover {
+  background: rgba(255,255,255,0.18);
+  border-color: rgba(255,255,255,0.4);
 }
 
-.depth-carousel__arrow:active {
-  transform: translateY(-50%) scale(0.94);
-}
+.photo-viewer__arrow--prev { left: 16px; }
+.photo-viewer__arrow--next { right: 16px; }
 
-.depth-carousel__arrow--prev {
-  left: 16px;
-}
-
-.depth-carousel__arrow--next {
-  right: 16px;
-}
-
-.depth-carousel__dots {
-  position: absolute;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 3000;
+.photo-viewer__main {
+  flex: 1;
   display: flex;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: rgba(14, 16, 22, 0.4);
-  backdrop-filter: blur(6px);
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 60px 70px 10px;
+  overflow: hidden;
 }
 
-.depth-carousel__dot {
-  width: 7px;
-  height: 7px;
-  padding: 0;
-  border: none;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.32);
+.photo-viewer__img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+  transition: opacity 0.3s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+
+.photo-viewer__counter {
+  color: rgba(255,255,255,0.5);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  padding: 8px 0 6px;
+  text-align: center;
+}
+
+.photo-viewer__thumbs {
+  display: flex;
+  gap: 6px;
+  padding: 6px 16px 16px;
+  overflow-x: auto;
+  max-width: 100%;
+  justify-content: center;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.photo-viewer__thumbs::-webkit-scrollbar { display: none; }
+
+.photo-viewer__thumb {
+  width: 52px;
+  height: 52px;
+  min-width: 52px;
+  border-radius: 4px;
+  object-fit: cover;
   cursor: pointer;
-  transition:
-    width 0.25s ease,
-    background 0.25s ease;
+  opacity: 0.4;
+  border: 2px solid transparent;
+  transition: opacity 0.25s ease, border-color 0.25s ease;
 }
 
-.depth-carousel__dot.is-active {
-  width: 20px;
-  background: #fff;
+.photo-viewer__thumb:hover {
+  opacity: 0.7;
+}
+
+.photo-viewer__thumb.active {
+  opacity: 1;
+  border-color: rgba(255,255,255,0.8);
 }
 
 
@@ -1035,10 +991,6 @@ ul {
   
   .profile-grid { grid-template-columns: 1fr; gap: 15px; }
   
-  .lightbox-prev { left: 10px; }
-  .lightbox-next { right: 10px; }
-  .lightbox-close { top: 15px; right: 20px; font-size: 2.5rem; }
-  
   .hide-on-mobile { display: none !important; }
   .show-on-mobile { display: block !important; }
   .hero-images { 
@@ -1048,6 +1000,26 @@ ul {
     margin-left: -20px; 
   }
   .stagger-wrapper { max-width: calc(50% - 8px); }
+
+  /* Mobile Photo Viewer */
+  .photo-viewer__main {
+    padding: 50px 10px 5px;
+  }
+  .photo-viewer__arrow {
+    width: 36px;
+    height: 36px;
+  }
+  .photo-viewer__arrow--prev { left: 6px; }
+  .photo-viewer__arrow--next { right: 6px; }
+  .photo-viewer__thumbs {
+    justify-content: flex-start;
+    padding: 4px 10px 10px;
+  }
+  .photo-viewer__thumb {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

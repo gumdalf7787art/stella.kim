@@ -134,11 +134,21 @@ const portfolioData = [
 ];
 
 import { VanillaMasonry } from './vanillaMasonry.js';
-import { VanillaDepthCarousel } from './vanillaDepthCarousel.js';
 
-let depthCarouselInstance = null;
-const carouselModal = document.getElementById('carousel-modal');
-const closeModalBtn = document.getElementById('carousel-modal-close');
+/* =========================================
+   Photo Viewer (Lightweight)
+========================================= */
+const photoViewer = document.getElementById('photo-viewer');
+const photoViewerImg = document.getElementById('photo-viewer-img');
+const photoViewerClose = document.getElementById('photo-viewer-close');
+const photoViewerPrev = document.getElementById('photo-viewer-prev');
+const photoViewerNext = document.getElementById('photo-viewer-next');
+const photoViewerCounter = document.getElementById('photo-viewer-counter');
+const photoViewerThumbs = document.getElementById('photo-viewer-thumbs');
+
+let viewerCurrentIndex = 0;
+let viewerTouchStartX = 0;
+let viewerTouchEndX = 0;
 
 function initPortfolio() {
   const masonryContainer = document.getElementById('masonry-container');
@@ -154,7 +164,7 @@ function initPortfolio() {
     hoverScale: 0.95,
     blurToFocus: true,
     onClick: (index) => {
-      openCarouselModal(index);
+      openPhotoViewer(index);
     }
   });
 
@@ -168,46 +178,95 @@ function initPortfolio() {
     });
   }
 
-  // Modal close handler
-  closeModalBtn.addEventListener('click', closeCarouselModal);
-  carouselModal.addEventListener('click', (e) => {
-    if (e.target === carouselModal) closeCarouselModal();
+  // Build thumbnails
+  portfolioData.forEach((item, i) => {
+    const thumb = document.createElement('img');
+    thumb.className = 'photo-viewer__thumb';
+    thumb.src = item.src;
+    thumb.alt = `Thumbnail ${i + 1}`;
+    thumb.loading = 'lazy';
+    thumb.addEventListener('click', () => showPhoto(i));
+    photoViewerThumbs.appendChild(thumb);
   });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && carouselModal.classList.contains('active')) {
-      closeCarouselModal();
+
+  // Photo Viewer events
+  photoViewerClose.addEventListener('click', closePhotoViewer);
+  photoViewer.addEventListener('click', (e) => {
+    if (e.target === photoViewer || e.target.classList.contains('photo-viewer__main')) {
+      closePhotoViewer();
     }
   });
-}
+  photoViewerPrev.addEventListener('click', (e) => { e.stopPropagation(); showPhoto(viewerCurrentIndex - 1); });
+  photoViewerNext.addEventListener('click', (e) => { e.stopPropagation(); showPhoto(viewerCurrentIndex + 1); });
 
-function openCarouselModal(initialIndex) {
-  carouselModal.classList.add('active');
-  
-  // Initialize Carousel if not done, else re-init with new index
-  const container = document.getElementById('depth-carousel-container');
-  container.innerHTML = ''; // Clear previous
-  
-  depthCarouselInstance = new VanillaDepthCarousel('#depth-carousel-container', {
-    items: portfolioData,
-    initialIndex: initialIndex,
-    cardWidth: 350,
-    cardHeight: 500,
-    depth: 250,
-    spread: 110,
-    tilt: 25,
-    visibleCards: 5,
-    blur: 6,
-    autoplay: false,
-    loop: true
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (!photoViewer.classList.contains('active')) return;
+    if (e.key === 'Escape') closePhotoViewer();
+    if (e.key === 'ArrowLeft') showPhoto(viewerCurrentIndex - 1);
+    if (e.key === 'ArrowRight') showPhoto(viewerCurrentIndex + 1);
   });
+
+  // Touch swipe for mobile
+  photoViewer.addEventListener('touchstart', (e) => {
+    viewerTouchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+
+  photoViewer.addEventListener('touchend', (e) => {
+    viewerTouchEndX = e.changedTouches[0].screenX;
+    const diff = viewerTouchStartX - viewerTouchEndX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) showPhoto(viewerCurrentIndex + 1);
+      else showPhoto(viewerCurrentIndex - 1);
+    }
+  }, { passive: true });
 }
 
-function closeCarouselModal() {
-  carouselModal.classList.remove('active');
-  if (depthCarouselInstance) {
-    depthCarouselInstance.destroy();
-    depthCarouselInstance = null;
+function openPhotoViewer(index) {
+  photoViewer.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  showPhoto(index);
+}
+
+function showPhoto(index) {
+  const total = portfolioData.length;
+  // Loop around
+  if (index < 0) index = total - 1;
+  if (index >= total) index = 0;
+  
+  viewerCurrentIndex = index;
+  
+  // Fade transition
+  photoViewerImg.style.opacity = '0';
+  setTimeout(() => {
+    photoViewerImg.src = portfolioData[index].src;
+    photoViewerImg.onload = () => {
+      photoViewerImg.style.opacity = '1';
+    };
+    // Fallback if cached
+    if (photoViewerImg.complete) {
+      photoViewerImg.style.opacity = '1';
+    }
+  }, 150);
+  
+  // Update counter
+  photoViewerCounter.textContent = `${index + 1} / ${total}`;
+  
+  // Update thumbnails
+  const thumbs = photoViewerThumbs.querySelectorAll('.photo-viewer__thumb');
+  thumbs.forEach((t, i) => {
+    t.classList.toggle('active', i === index);
+  });
+  
+  // Scroll active thumbnail into view
+  if (thumbs[index]) {
+    thumbs[index].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
   }
+}
+
+function closePhotoViewer() {
+  photoViewer.classList.remove('active');
+  document.body.style.overflow = '';
 }
 
 /* =========================================

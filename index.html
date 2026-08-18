@@ -133,11 +133,21 @@
 
   </main>
 
-  <!-- Carousel Modal -->
-  <div class="carousel-modal" id="carousel-modal">
-    <button class="carousel-modal-close" id="carousel-modal-close" aria-label="Close">&times;</button>
-    <div id="depth-carousel-container" style="width: 100%; height: 100%; position: relative;">
-      <!-- DepthCarousel will be injected here -->
+  <!-- Photo Viewer Modal -->
+  <div class="photo-viewer" id="photo-viewer">
+    <button class="photo-viewer__close" id="photo-viewer-close" aria-label="Close">&times;</button>
+    <button class="photo-viewer__arrow photo-viewer__arrow--prev" id="photo-viewer-prev">
+      <svg viewBox="0 0 24 24" width="24" height="24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="photo-viewer__arrow photo-viewer__arrow--next" id="photo-viewer-next">
+      <svg viewBox="0 0 24 24" width="24" height="24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="photo-viewer__main" id="photo-viewer-main">
+      <img class="photo-viewer__img" id="photo-viewer-img" src="" alt="Portfolio Photo" draggable="false">
+    </div>
+    <div class="photo-viewer__counter" id="photo-viewer-counter">1 / 29</div>
+    <div class="photo-viewer__thumbs" id="photo-viewer-thumbs">
+      <!-- Thumbnails injected by JS -->
     </div>
   </div>
 

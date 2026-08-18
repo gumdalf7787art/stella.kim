@@ -16,18 +16,21 @@ export class VanillaMasonry {
     this.width = 0;
     this.imagesReady = false;
     this.grid = [];
+    this.imageAspects = {}; // Cache aspect ratios
     
     this.init();
   }
 
   init() {
     this.setupResizeObserver();
-    // We don't need to block on image loading. Let the browser handle background-image loading natively.
-    this.imagesReady = true;
-    if (this.width > 0) {
-      this.calculateGrid();
-      this.render();
-    }
+    // Preload images to know aspect ratios for mobile layout
+    this.preloadImages().then(() => {
+      this.imagesReady = true;
+      if (this.width > 0) {
+        this.calculateGrid();
+        this.render();
+      }
+    });
   }
 
   setupResizeObserver() {
@@ -50,8 +53,7 @@ export class VanillaMasonry {
     if (w >= 1500) this.columns = 5;
     else if (w >= 1000) this.columns = 4;
     else if (w >= 600) this.columns = 3;
-    else if (w >= 400) this.columns = 2;
-    else this.columns = 1;
+    else this.columns = 2; // Always at least 2 columns on mobile
   }
 
   async preloadImages() {
@@ -59,7 +61,14 @@ export class VanillaMasonry {
       return new Promise(resolve => {
         const img = new Image();
         img.src = item.src;
-        img.onload = img.onerror = () => resolve();
+        img.onload = () => {
+          this.imageAspects[item.src] = img.naturalWidth / img.naturalHeight;
+          resolve();
+        };
+        img.onerror = () => {
+          this.imageAspects[item.src] = 1; // Fallback square
+          resolve();
+        };
       });
     });
     await Promise.all(promises);
@@ -67,22 +76,66 @@ export class VanillaMasonry {
 
   calculateGrid() {
     if (!this.width) return;
+    
+    const isMobile = window.innerWidth < 600;
+    
+    if (isMobile) {
+      this.calculateMobileGrid();
+    } else {
+      this.calculateDesktopGrid();
+    }
+  }
 
+  calculateDesktopGrid() {
     const colHeights = new Array(this.columns).fill(0);
     const columnWidth = this.width / this.columns;
 
     this.grid = this.items.map(item => {
       const col = colHeights.indexOf(Math.min(...colHeights));
       const x = columnWidth * col;
-      // In vanilla masonry we can use a fixed aspect ratio or pre-calculated height.
-      // Let's assign random heights for a true masonry feel, or base it on data.
-      // For images without explicit heights, let's just make them somewhat random between 200 and 400.
       const height = item.height || (250 + Math.random() * 200); 
       const y = colHeights[col];
-
       colHeights[col] += height;
-
       return { ...item, x, y, w: columnWidth, h: height };
+    });
+    
+    this.container.style.height = `${Math.max(...colHeights)}px`;
+  }
+
+  calculateMobileGrid() {
+    const gap = 8;
+    const colWidth = (this.width - gap) / 2;
+    const colHeights = [0, 0];
+    
+    // Seed random with a fixed value for consistency per session
+    let seedIdx = 0;
+    
+    this.grid = this.items.map((item, idx) => {
+      const aspect = this.imageAspects[item.src] || 1;
+      const isLandscape = aspect > 1.2;
+      
+      if (isLandscape) {
+        // Landscape: span full width
+        const y = Math.max(...colHeights);
+        const h = this.width / aspect;
+        colHeights[0] = y + h + gap;
+        colHeights[1] = y + h + gap;
+        return { ...item, x: 0, y, w: this.width, h, span: 2 };
+      } else {
+        // Portrait/square: place in shorter column with varied heights
+        const col = colHeights.indexOf(Math.min(...colHeights));
+        const x = col === 0 ? 0 : colWidth + gap;
+        const y = colHeights[col];
+        
+        // Create asymmetric heights: alternate between taller and shorter
+        const baseHeight = colWidth / aspect;
+        // Add random variation (±15%) for asymmetric feel
+        const variation = 0.85 + (((idx * 7 + 3) % 11) / 11) * 0.3;
+        const h = baseHeight * variation;
+        
+        colHeights[col] = y + h + gap;
+        return { ...item, x, y, w: colWidth, h, span: 1 };
+      }
     });
     
     this.container.style.height = `${Math.max(...colHeights)}px`;

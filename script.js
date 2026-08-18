@@ -253,7 +253,17 @@ function initHeroRotation() {
   const slots = document.querySelectorAll('.stagger-wrapper');
   if (slots.length === 0 || portfolioData.length === 0) return;
 
-  const pool = portfolioData.map(item => item.src);
+  // Dynamically build a pool of portrait-only images
+  const pool = [];
+  portfolioData.forEach(item => {
+    const img = new Image();
+    img.src = item.src;
+    img.onload = () => {
+      if (img.naturalHeight >= img.naturalWidth) {
+        pool.push(item.src);
+      }
+    };
+  });
   
   slots.forEach((slot, index) => {
     // Stagger the rotation for each slot slightly
@@ -266,7 +276,10 @@ function initHeroRotation() {
     if (!primaryImg || !secondaryImg) return;
     
     setInterval(() => {
-      // Pick random image from portfolio
+      // Wait until pool is populated
+      if (pool.length === 0) return;
+      
+      // Pick random image from pool
       const randomSrc = pool[Math.floor(Math.random() * pool.length)];
       
       if (isPrimaryActive) {

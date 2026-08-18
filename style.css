@@ -289,7 +289,7 @@ ul {
 .stagger-wrapper {
   height: 100%;
   flex: 1;
-  max-width: 30%;
+  max-width: 36%;
   display: flex;
   justify-content: center;
 }
@@ -1038,7 +1038,7 @@ ul {
   
   .hide-on-mobile { display: none !important; }
   .hero-images { gap: 15px; height: 50vh; }
-  .stagger-wrapper { max-width: 45%; }
+  .stagger-wrapper { max-width: calc(50% - 8px); }
 }
 
 @media (prefers-reduced-motion: reduce) {

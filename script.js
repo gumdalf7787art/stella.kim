@@ -9,6 +9,7 @@ function initApp() {
   initAnimations();
   initPortfolio();
   initContactForm();
+  initHeroRotation();
   
   // Initialize MoltenMetal Background
   initMoltenMetal('#hero-bg-container', {
@@ -242,6 +243,48 @@ function initContactForm() {
         statusMsg.textContent = '';
       }, 5000);
     }, 1500);
+  });
+}
+
+/* =========================================
+   5. Hero Image Rotation
+========================================= */
+function initHeroRotation() {
+  const slots = document.querySelectorAll('.stagger-wrapper');
+  if (slots.length === 0 || portfolioData.length === 0) return;
+
+  const pool = portfolioData.map(item => item.src);
+  
+  slots.forEach((slot, index) => {
+    // Stagger the rotation for each slot slightly
+    const intervalTime = 4000 + (index * 800) + (Math.random() * 500);
+    let isPrimaryActive = true;
+    
+    const primaryImg = slot.querySelector('.hero-mini-img:first-child');
+    const secondaryImg = slot.querySelector('.hero-mini-img:last-child');
+    
+    if (!primaryImg || !secondaryImg) return;
+    
+    setInterval(() => {
+      // Pick random image from portfolio
+      const randomSrc = pool[Math.floor(Math.random() * pool.length)];
+      
+      if (isPrimaryActive) {
+        secondaryImg.src = randomSrc;
+        secondaryImg.onload = () => {
+          secondaryImg.classList.add('active');
+          primaryImg.classList.remove('active');
+          isPrimaryActive = false;
+        };
+      } else {
+        primaryImg.src = randomSrc;
+        primaryImg.onload = () => {
+          primaryImg.classList.add('active');
+          secondaryImg.classList.remove('active');
+          isPrimaryActive = true;
+        };
+      }
+    }, intervalTime);
   });
 }
 

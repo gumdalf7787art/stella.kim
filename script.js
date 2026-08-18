@@ -157,6 +157,16 @@ function initPortfolio() {
     }
   });
 
+  // View All button logic
+  const btnViewAll = document.getElementById('btn-view-all');
+  const portfolioWrapper = document.getElementById('portfolio-wrapper');
+  
+  if (btnViewAll && portfolioWrapper) {
+    btnViewAll.addEventListener('click', () => {
+      portfolioWrapper.classList.add('expanded');
+    });
+  }
+
   // Modal close handler
   closeModalBtn.addEventListener('click', closeCarouselModal);
   carouselModal.addEventListener('click', (e) => {

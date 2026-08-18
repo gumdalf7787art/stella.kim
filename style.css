@@ -343,6 +343,59 @@ ul {
   100% { transform: translateY(100%); }
 }
 
+.portfolio-wrapper {
+  position: relative;
+  max-height: 1200px; /* limits to roughly half or a bit less */
+  overflow: hidden;
+  transition: max-height 1.2s ease-in-out;
+  width: 100%;
+}
+
+.portfolio-wrapper.expanded {
+  max-height: 20000px; /* large enough to show all images */
+}
+
+.portfolio-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 300px;
+  background: linear-gradient(to bottom, rgba(10,10,10,0) 0%, rgba(10,10,10,1) 90%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 30px;
+  z-index: 10;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.portfolio-wrapper.expanded .portfolio-overlay {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.btn-view-all {
+  pointer-events: auto;
+  background: var(--color-soft-white);
+  color: var(--color-charcoal-black);
+  border: 1px solid var(--color-soft-white);
+  padding: 15px 40px;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  font-weight: 500;
+}
+
+.btn-view-all:hover {
+  background: transparent;
+  color: var(--color-soft-white);
+}
+
 /* 2. About Section */
 .about {
   background-color: var(--color-soft-white);

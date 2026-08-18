@@ -283,8 +283,9 @@ ul {
   justify-content: center;
   align-items: center;
   margin-top: 1rem;
-  width: 100%;
-  max-width: 1380px;
+  width: 115%;
+  margin-left: -7.5%;
+  max-width: none;
   height: 55vh;
 }
 

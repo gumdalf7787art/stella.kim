@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>STELLA KIM | Senior Model Portfolio</title>
+  <meta name="description" content="시니어 모델 김은경(STELLA KIM)의 포트폴리오. 모든 나이에는 그만의 빛이 있습니다.">
+  <meta property="og:title" content="STELLA KIM | Senior Model Portfolio">
+  <meta property="og:description" content="시간을 초월한 우아함, 지금 이 순간의 존재감. 시니어 모델 김은경의 포트폴리오.">
+  <meta property="og:image" content="photo-hero.jpg">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Montserrat:wght@200;300;400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Inter:wght@300;400;500&family=Nanum+Myeongjo:wght@400;700&display=swap" rel="stylesheet">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navigation Indicator -->
+  <nav class="vertical-nav" id="vertical-nav">
+    <div class="nav-dot active" data-target="hero"></div>
+    <div class="nav-dot" data-target="portfolio"></div>
+    <div class="nav-dot" data-target="about"></div>
+    <div class="nav-dot" data-target="philosophy"></div>
+  </nav>
+
+  <main class="scroll-container" id="scroll-container">
+    
+    <!-- 1. Hero Section -->
+    <section class="section hero" id="hero">
+      <div class="hero-bg" id="hero-bg-container">
+        <!-- MoltenMetal canvas will be injected here -->
+        <div class="hero-overlay"></div>
+      </div>
+      <div class="hero-content">
+        <h1 class="logo-text stagger-item">STELLA KIM</h1>
+        <p class="subtitle stagger-item">Senior Model & Lifestyle Creator</p>
+        <div class="hero-images">
+          <div class="stagger-wrapper"><img src="images/20260526_093940.jpg" alt="Hero Image 1" class="hero-mini-img"></div>
+          <div class="stagger-wrapper"><img src="images/20260521_130329.jpg" alt="Hero Image 2" class="hero-mini-img"></div>
+          <div class="stagger-wrapper"><img src="images/20260525_091523.jpg" alt="Hero Image 3" class="hero-mini-img"></div>
+        </div>
+      </div>
+      <div class="scroll-indicator">
+        <span class="scroll-line"></span>
+      </div>
+    </section>
+
+    <!-- 2. Portfolio Section -->
+    <section class="section portfolio" id="portfolio">
+      <div class="section-content" style="width: 100%;">
+        <h2 class="section-title scale-up-title">PORTFOLIO</h2>
+        <div id="masonry-container" style="width: 100%; max-width: 1400px; margin: 0 auto;">
+          <!-- Masonry items will be injected here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Profile Section -->
+    <section class="section about" id="about">
+      <div class="about-container">
+        <div class="about-image-wrapper fade-in-left">
+          <img src="images/익선동 8.jpg" alt="Stella Kim Portrait" class="about-img">
+        </div>
+        <div class="about-text-wrapper fade-in-right">
+          <h2 class="section-title">Profile</h2>
+          
+          <div class="profile-grid" style="border-top: 1px solid var(--color-champagne-silver); border-bottom: none; padding: 2rem 0 0 0; margin-bottom: 0;">
+            <div class="profile-item"><span class="label">Name:</span> <span class="value">Stella Kim</span></div>
+            <div class="profile-item"><span class="label">Korean Name:</span> <span class="value">김은경</span></div>
+            <div class="profile-item"><span class="label">Category:</span> <span class="value">Senior Model</span></div>
+            <div class="profile-item"><span class="label">Based in:</span> <span class="value">[Seoul, Korea]</span></div>
+            <div class="profile-item"><span class="label">Height:</span> <span class="value">[158cm]</span></div>
+            <div class="profile-item"><span class="label">Clothing:</span> <span class="value">[F / 62]</span></div>
+            <div class="profile-item"><span class="label">Shoes:</span> <span class="value">[230mm]</span></div>
+            <div class="profile-item"><span class="label">Hair:</span> <span class="value">[Dark Brown, Medium]</span></div>
+            <div class="profile-item"><span class="label">Eyes:</span> <span class="value">[Brown]</span></div>
+            <div class="profile-item" style="grid-column: 1 / -1;"><span class="label">Available For:</span> <span class="value">Fashion, Beauty, Lifestyle, Travel, Wellness, Commercial</span></div>
+            <div class="profile-item" style="grid-column: 1 / -1;"><span class="label">Email:</span> <span class="value"><a href="mailto:goodduck2@naver.com">[goodduck2@naver.com]</a></span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Philosophy Section -->
+    <section class="section philosophy" id="philosophy">
+      <div class="philosophy-bg">
+        <img src="images/IMG_2313.JPG" alt="Philosophy Image" class="philosophy-img">
+        <div class="philosophy-overlay"></div>
+      </div>
+      <div class="philosophy-content fade-in-up">
+        <h2 class="logo-text" style="font-size: 2.5rem; margin-bottom: 0.5rem; letter-spacing: 0.2em;">STELLA KIM</h2>
+        <p class="subtitle" style="margin-bottom: 4rem;">Senior Model & Lifestyle Creator</p>
+        
+        <h2 class="phil-title" style="font-size: 2rem; margin-bottom: 0.5rem;">Every Age Has Its Light.</h2>
+        <p class="phil-kor" style="margin-bottom: 3rem;">모든 나이에는 그만의 빛이 있습니다.</p>
+        
+        <p class="phil-sub" style="font-family: var(--font-sans); font-size: 1.1rem; font-style: normal; color: var(--color-soft-white);">연락처 : goodduck2@naver.com</p>
+      </div>
+      <footer class="footer">
+        <p>© STELLA KIM. All Rights Reserved.</p>
+      </footer>
+    </section>
+
+  </main>
+
+  <!-- Carousel Modal -->
+  <div class="carousel-modal" id="carousel-modal">
+    <button class="carousel-modal-close" id="carousel-modal-close" aria-label="Close">&times;</button>
+    <div id="depth-carousel-container" style="width: 100%; height: 100%; position: relative;">
+      <!-- DepthCarousel will be injected here -->
+    </div>
+  </div>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>

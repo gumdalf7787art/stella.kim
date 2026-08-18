@@ -1017,6 +1017,8 @@ ul {
   .lightbox-prev { left: 10px; }
   .lightbox-next { right: 10px; }
   .lightbox-close { top: 15px; right: 20px; font-size: 2.5rem; }
+  
+  .hide-on-mobile { display: none !important; }
 }
 
 @media (prefers-reduced-motion: reduce) {
